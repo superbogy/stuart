@@ -1,5 +1,5 @@
 ---
-- hosts: test
+- hosts: "{{node}}"
   vars:
     src: /workspace/myself/knight
     dest: /usr/sling/knight

@@ -4,6 +4,9 @@ module.exports = {
     hosts: 'example/hosts',
     tasks: ['build', 'ping'],
     debug: true,
+    vars: {
+      node: 'test'
+    }
   },
   scripts: ['npm run test'],
   slack: {
@@ -12,5 +15,5 @@ module.exports = {
     channel: 'general',
     username: 'bug-dog'
   },
-  git: true,
+  // git: true,
 };

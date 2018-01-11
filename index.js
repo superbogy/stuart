@@ -101,6 +101,12 @@ const stuart= {
       const cursor = shell.pwd().stdout;
       let deploy = path.isAbsolute(config.file) ? config.file : path.resolve(config.file);
       let command = 'ansible-playbook -i ' + config.hosts + ' ' + deploy;
+      if (config.vars) {
+        let vars = JSON.stringify(config.vars);
+        vars = vars.replace(/\"/g, '\\"');
+        command += ` --extra-vars "${vars}"`;
+      }
+
       log(chalk.gray('current work directory:'), chalk.blue(cursor));
       const tasks = [];
       if (config.tasks.length && !task) {
@@ -128,6 +134,7 @@ const stuart= {
       } else if (task) {
         command += ' -t ' + task;
       }
+
 
       if (config.debug) {
         command += ' -vv';

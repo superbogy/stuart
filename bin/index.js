@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const sling = require('../index');
+const stuart = require('../index');
 const chalk = require('chalk');
 const commander = require('commander');
 const log = console.log;
@@ -14,14 +14,14 @@ commander
  commander.on('--help', function () {
   log('  Examples:');
   log('');
-  log('    $ sling run [file] <task>');
+  log('    $ stuart run [file] <task>');
 });
 
 commander.command('run [file] [task]')
-  .description('  $ start sling job')
+  .description('  $ start stuart job')
   .action((file, task) => {
     console.log('----->', task, file);
-    file = file || '.sling.js';
+    file = file || '.stuart.js';
     file = path.resolve(file);
     log('run task: ', chalk.bgGreen.bold(task));
     log('$use file:', chalk.underline(file));
@@ -43,7 +43,7 @@ commander.command('run [file] [task]')
       }
     }
 
-    sling.run(config, task);
+    stuart.run(config, task);
   });
 
 commander.parse(process.argv);
