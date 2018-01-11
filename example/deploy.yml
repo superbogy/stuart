@@ -1,0 +1,24 @@
+---
+- hosts: test
+  vars:
+    src: /workspace/myself/knight
+    dest: /usr/sling/knight
+  remote_user: root
+  tasks:
+    - name: ping
+      ping:
+      tags:
+        - ping
+    - name: sync code
+      synchronize:
+        src: "{{ src }}"
+        dest: "{{ dest }}"
+        delete: yes
+        dest_port: 65422
+        rsync_opts:
+          - "--exclude=.git"
+          - "--exclude=node_modules"
+    - name: "build" 
+      shell: "cd {{ dest }}; echo fuck world"
+      tags: 
+        - build

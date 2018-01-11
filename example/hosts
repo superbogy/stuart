@@ -1,0 +1,2 @@
+[test]
+dev ansible_ssh_host=10.0.6.29 ansible_ssh_port=65422 ansible_ssh_user=root
