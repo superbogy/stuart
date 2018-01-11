@@ -11,16 +11,15 @@ const rq = require('request-promise');
 const log = console.log;
 const setting = {};
 
-const sling = {
+const stuart= {
   async run (config, task) {
     try {
       let cursor = process.cwd();
       log(chalk.gray('current working directory:$'), chalk.blue(cursor));
-      const sling = cursor + '/.sling.js';
       config = config ||  {};
       if (!Object.keys(config).length) {
-        log(chalk.gray('load sling config from: '), chalk.green(sling))
-        config = require(sling);
+        log(chalk.yellow('empty config'));
+        return;
       }
 
       const {scripts, playbook, ansible, git} = config;
@@ -81,7 +80,7 @@ const sling = {
    * @param {Object} config 
    */
   async playbook(config, task) {
-    let tmpdir = os.tmpdir() + '/.sling';
+    let tmpdir = os.tmpdir() + '/.stuart';
     try {
       if (!config) {
         log(chalk.red('error: playbook config not found'));
@@ -272,4 +271,4 @@ ansible_ssh_host=${host} ansible_ssh_user=${config.user} ansible_ssh_port=${conf
 }
 };
 
-module.exports = sling;
+module.exports = stuart;

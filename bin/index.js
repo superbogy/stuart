@@ -35,8 +35,9 @@ commander.command('run [file] [task]')
       const extname = path.extname(file);
       if (extname === '.js') {
         config = require(file);
-      } else if (extname === 'json') {
-        config = require(file);
+      } else if (extname === '.json') {
+        const jsonstring = fs.readFileSync(file);
+        config = JSON.parse(jsonstring);
       } else if (extname === 'yaml' || extname === 'yml') {
         config = yaml.safeLoad(fs.readFileSync(file, 'utf8'));
       }
