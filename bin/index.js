@@ -20,8 +20,7 @@ commander
 commander.command('run [file] [task]')
   .description('  $ start stuart job')
   .action((file, task) => {
-    console.log('----->', task, file);
-    file = file || '.stuart.js';
+    file = file || '.banana.js';
     file = path.resolve(file);
     log('run task: ', chalk.bgGreen.bold(task));
     log('$use file:', chalk.underline(file));

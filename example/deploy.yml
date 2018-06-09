@@ -1,8 +1,8 @@
 ---
 - hosts: "{{node}}"
   vars:
-    src: /workspace/myself/knight
-    dest: /usr/sling/knight
+    src: /localpath/knight
+    dest: /path/knight
   remote_user: root
   tasks:
     - name: ping
@@ -10,11 +10,13 @@
       tags:
         - ping
     - name: sync code
+      tags:
+        - sync
       synchronize:
         src: "{{ src }}"
         dest: "{{ dest }}"
         delete: yes
-        dest_port: 65422
+        dest_port: 22
         rsync_opts:
           - "--exclude=.git"
           - "--exclude=node_modules"

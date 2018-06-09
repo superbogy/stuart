@@ -49,7 +49,11 @@ const stuart= {
 
       if (scripts) {
         for (const item of scripts) {
-          shell.exec(item);
+          const res = shell.exec(item);
+          if (res.stderr) {
+            log(chalk.red('run script: ' + item, '#with error:', res.stderr));
+            process.exit(1);
+          }
         }
       }
 
@@ -100,7 +104,7 @@ const stuart= {
 
       const cursor = shell.pwd().stdout;
       let deploy = path.isAbsolute(config.file) ? config.file : path.resolve(config.file);
-      let command = 'ansible-playbook -i ' + config.hosts + ' ' + deploy;
+      let command = 'ansible-playbook -i ' + hostPath + ' ' + deploy;
       if (config.vars) {
         let vars = JSON.stringify(config.vars);
         vars = vars.replace(/\"/g, '\\"');
@@ -266,11 +270,16 @@ const stuart= {
     let hosts = `cat>"${tmpdir}/hosts"<<EOF`;
         hosts += `
 [${config.node}]
-    `;
+`;
     for (const host of config.hosts) {
-      hosts += `
-ansible_ssh_host=${host} ansible_ssh_user=${config.user} ansible_ssh_port=${config.port}
-      `;
+      hosts += `${host} ansible_ssh_host=${host} `;
+      if (config.user) {
+        hosts += `ansible_ssh_user=${config.user} `
+      }
+
+      if (config.port) {
+        hosts += `ansible_ssh_port=${config.port}`;
+      }
     }
     shell.exec(hosts);
 

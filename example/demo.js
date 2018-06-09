@@ -1,8 +1,12 @@
 module.exports = {
   playbook: {
     file: 'example/deploy.yml',
-    hosts: 'example/hosts',
-    tasks: ['build', 'ping'],
+    // hosts: 'example/hosts',
+    hosts: ['ip'],
+    tasks: ['ping', 'sync'],
+    node: 'test',
+    user: 'root',
+    port: '22',
     debug: true,
     vars: {
       node: 'test'
@@ -15,5 +19,6 @@ module.exports = {
     channel: 'general',
     username: 'bug-dog'
   },
-  // git: true,
+  git: true,
+  debug: true,
 };
