@@ -7,7 +7,7 @@ nodejs 开发的ansible 快速部署工具。
 
 `stuart --help`
 
-`stuart run deploy/demon.json ping`
+`stuart run deploy/demo.js ping`
 
 
 ### config

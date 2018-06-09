@@ -1,10 +1,10 @@
 {
   "name": "stuart",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "lazy seagull fly me from the dark",
   "main": "index.js",
   "scripts": {
-    "demo": "node bin/index run example/.sling.js",
+    "demo": "node bin/index run example/demo.js",
     "test": "echo hello world \n"
   },
   "repository": {
