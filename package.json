@@ -1,5 +1,5 @@
 {
-  "name": "@superbogy/ample",
+  "name": "@superbogy/stuart",
   "version": "0.2.0",
   "description": "lazy seagull fly me from the dark",
   "main": "index.js",
@@ -26,7 +26,7 @@
     "slack": "^11.0.2"
   },
   "bin": {
-    "stuart": "./bin/index.js"
+    "ample": "./bin/index.js"
   },
   "engines": {
     "node": ">=8.0.0"
