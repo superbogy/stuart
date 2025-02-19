@@ -1,6 +1,6 @@
 {
   "name": "ansiple",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "lazy seagull fly me from the dark",
   "main": "index.js",
   "scripts": {
