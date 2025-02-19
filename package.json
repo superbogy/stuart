@@ -1,6 +1,6 @@
 {
   "name": "@superbogy/ample",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "lazy seagull fly me from the dark",
   "main": "index.js",
   "scripts": {
