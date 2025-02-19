@@ -22,8 +22,8 @@
     "mz": "^2.7.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "shelljs": "^0.7.8",
-    "slack": "^9.1.5"
+    "shelljs": "^0.8.5",
+    "slack": "^11.0.2"
   },
   "bin": {
     "stuart": "./bin/index.js"

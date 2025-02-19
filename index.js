@@ -11,21 +11,21 @@ const rq = require('request-promise');
 const log = console.log;
 const setting = {};
 
-const stuart= {
-  async run (config, task) {
+const stuart = {
+  async run(config, task) {
     try {
       let cursor = process.cwd();
       log(chalk.gray('current working directory:$'), chalk.blue(cursor));
-      config = config ||  {};
+      config = config || {};
       if (!Object.keys(config).length) {
         log(chalk.yellow('empty config'));
         return;
       }
 
-      const {scripts, playbook, ansible, git} = config;
+      const { scripts, playbook, ansible, git } = config;
       if (git) {
         const showTags = shell.exec('git describe --tags --abbrev=0');
-        const gitTag = showTags.stdout.replace(/\s/ig, '');
+        const gitTag = showTags.stdout.replace(/\s/gi, '');
         if (!gitTag) {
           log(chalk.red('git tag not found~!'));
           return;
@@ -35,13 +35,17 @@ const stuart= {
             type: 'confirm',
             name: 'tag',
             message: 'git will checkout to tag ' + gitTag,
-            choices: ['YES', 'NO']
-          }
+            choices: ['YES', 'NO'],
+          },
         ]);
         if (answers.tag) {
           const checkout = shell.exec('git checkout ' + gitTag);
           if (checkout.stdout) {
-            log(chalk.red(`git checkout ${gitTag} with error: ` + checkout.stderr));
+            log(
+              chalk.red(
+                `git checkout ${gitTag} with error: ` + checkout.stderr,
+              ),
+            );
             return;
           }
         }
@@ -75,13 +79,13 @@ const stuart= {
     } catch (err) {
       log('ERROR:', chalk.red(err.message), err.stack);
     } finally {
-      log(chalk.yellow('---------bye----------~!'))
+      log(chalk.yellow('---------bye----------~!'));
       process.exit(0);
     }
   },
   /**
    * use playbook deploy
-   * @param {Object} config 
+   * @param {Object} config
    */
   async playbook(config, task) {
     let tmpdir = os.tmpdir() + '/.stuart';
@@ -95,7 +99,6 @@ const stuart= {
         return log(chalk.yellow('warn: playbook file not found'));
       }
 
-      let hostsPath = '';
       if (Array.isArray(config.hosts)) {
         hostPath = this.genHost(config, tmpdir);
       } else {
@@ -103,7 +106,9 @@ const stuart= {
       }
 
       const cursor = shell.pwd().stdout;
-      let deploy = path.isAbsolute(config.file) ? config.file : path.resolve(config.file);
+      let deploy = path.isAbsolute(config.file)
+        ? config.file
+        : path.resolve(config.file);
       let command = 'ansible-playbook -i ' + hostPath + ' ' + deploy;
       if (config.vars) {
         let vars = JSON.stringify(config.vars);
@@ -112,45 +117,47 @@ const stuart= {
       }
 
       log(chalk.gray('current work directory:'), chalk.blue(cursor));
-      const tasks = [];
       if (config.tasks.length && !task) {
-        let output = [];
         const answers = await inquirer.prompt([
           {
             type: 'input',
             name: 'tasks',
-            message: 'choose tasks,use comma split$ ' + chalk.bgGreen(config.tasks.join(', ')) + ' :',
+            message:
+              'choose tasks,use comma split$ ' +
+              chalk.bgGreen(config.tasks.join(', ')) +
+              ' :',
             validate: (value) => {
               value = value.split(',');
-              const tags = value.filter(tag => {
+              const tags = value.filter((tag) => {
                 return config.tasks.includes(tag);
               });
               if (tags.length) {
                 return true;
               }
 
-              return 'Invalide input~!';
+              return 'Invalid input~!';
             },
           },
         ]);
-        
+
         command += ' -t ' + answers.tasks;
       } else if (task) {
         command += ' -t ' + task;
       }
-
 
       if (config.debug) {
         command += ' -vv';
       }
 
       log(chalk.gray('ansible-playbook start job:'), chalk.green(command));
-      const input = await inquirer.prompt([{
-        type: 'confirm',
-        name: 'confirm',
-        message: 'continue or No',
-        choices: ['YES', 'NO']
-      }]);
+      const input = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'confirm',
+          message: 'continue or No',
+          choices: ['YES', 'NO'],
+        },
+      ]);
       if (input.confirm !== true) {
         return;
       }
@@ -164,17 +171,17 @@ const stuart= {
   },
   /**
    * ansible module
-   * @param {Object} config 
+   * @param {Object} config
    */
   async ansible(config) {
     let command = '';
-    const {group, src, dest, hosts} = config;
+    const { group, src, dest, hosts } = config;
     const tasks = config.tasks || [];
     let job = '';
     if (config.command) {
       command = config.command;
     } else {
-      command = ['ansible']
+      command = ['ansible'];
       if (hosts) {
         if (Array.isArray(hosts)) {
           command.push('-i');
@@ -196,7 +203,7 @@ const stuart= {
         }
         command = command.join(' ');
         const task = {
-          synchronize: target
+          synchronize: target,
         };
 
         tasks.unshift(task);
@@ -214,12 +221,14 @@ const stuart= {
 
           job = command + ' -m ' + module + ' -a ' + `"${action}"`;
           log(chalk.gray('command will execute:'), chalk.green(job));
-          const input = await inquirer.prompt([{
-            type: 'confirm',
-            name: 'confirm',
-            message: 'continue or No',
-            choices: ['YES', 'NO']
-          }]);
+          const input = await inquirer.prompt([
+            {
+              type: 'confirm',
+              name: 'confirm',
+              message: 'continue or No',
+              choices: ['YES', 'NO'],
+            },
+          ]);
 
           if (input.confirm !== true) {
             continue;
@@ -230,13 +239,13 @@ const stuart= {
       }
     }
   },
-  rmdir (dir) {
+  rmdir(dir) {
     const list = fs.readdirSync(dir);
-    for(let i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
       let filename = path.join(dir, list[i]);
       let stat = fs.statSync(filename);
-      if(filename === "." || filename === "..") {
-      } else if(stat.isDirectory()) {
+      if (filename === '.' || filename === '..') {
+      } else if (stat.isDirectory()) {
         this.rmdir(filename);
       } else {
         fs.unlinkSync(filename);
@@ -247,11 +256,15 @@ const stuart= {
   async notify(cfg) {
     if (!cfg) return;
     const payload = {
-      text: (new Date).toString() + '#project [' + cfg.project + '] had been deploy',
+      text:
+        new Date().toString() +
+        '#project [' +
+        cfg.project +
+        '] had been deploy',
       channel: cfg.channel,
       link_names: 1,
       username: cfg.username,
-      icon_emoji: ':monkey_face:'
+      icon_emoji: ':monkey_face:',
     };
     const res = await rq({
       uri: cfg.webhook,
@@ -260,21 +273,21 @@ const stuart= {
       json: true,
     });
   },
-  genHost (config, tmpdir) {
+  genHost(config, tmpdir) {
     if (fs.existsSync(tmpdir)) {
       this.rmdir(tmpdir);
     }
 
     fs.mkdirSync(tmpdir);
-    log(chalk.gray('$make tmp dir: ',  tmpdir));
+    log(chalk.gray('$make tmp dir: ', tmpdir));
     let hosts = `cat>"${tmpdir}/hosts"<<EOF`;
-        hosts += `
+    hosts += `
 [${config.node}]
 `;
     for (const host of config.hosts) {
       hosts += `${host} ansible_ssh_host=${host} `;
       if (config.user) {
-        hosts += `ansible_ssh_user=${config.user} `
+        hosts += `ansible_ssh_user=${config.user} `;
       }
 
       if (config.port) {
@@ -284,7 +297,7 @@ const stuart= {
     shell.exec(hosts);
 
     return tmpdir + '/hosts';
-}
+  },
 };
 
 module.exports = stuart;
