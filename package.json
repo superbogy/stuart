@@ -1,6 +1,6 @@
 {
   "name": "stuart",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "lazy seagull fly me from the dark",
   "main": "index.js",
   "scripts": {
