@@ -1,14 +1,14 @@
-# stuart
+# ansiple
 
 nodejs 开发的 ansible 快速部署工具。
 
 ### guide
 
-`npm i start` or `npm i @superbogy/stuart -g`
+`npm i start` or `npm i ansiple -g`
 
-`stuart --help`
+`ansiple --help`
 
-`stuart run deploy/demo.js ping`
+`ansiple run deploy/demo.js ping`
 
 ### config
 
@@ -21,7 +21,7 @@ nodejs 开发的 ansible 快速部署工具。
   - `file` playbook yaml file
   - `user` ssh users
   - `port` ssh port
-- `scripts` array command run before deploy. For exstuart `"scripts": ["npm run build"]`
+- `scripts` array command run before deploy. For exansiple `"scripts": ["npm run build"]`
 - `git` if set true, it will checkout to current git tag
 - `slack`
   - `project` project name
